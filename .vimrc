@@ -49,13 +49,16 @@ syntax on
 set number
 colorscheme railscasts
 map <C-l> :NERDTreeTabsToggle <CR>
+
 set mouse=a
-let g:NERDTreeMouseMode=3
 set laststatus=2
 set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
 set backspace=2
 let g:auto_save=1
 set clipboard=unnamed
-let &t_SI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=1\x7\<Esc>\\"
-let &t_SR = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=2\x7\<Esc>\\"
-let &t_EI = "\<Esc>Ptmux;\<Esc>\<Esc>]50;CursorShape=0\x7\<Esc>\\"
+inoremap kj <ESC>
+let mapleader = " "
+cnoremap kj <C-C>
+
+noremap <Leader>s :update<CR>
+:autocmd InsertEnter,InsertLeave * set cul!
