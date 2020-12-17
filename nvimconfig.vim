@@ -11,7 +11,6 @@ let mapleader = " "
 let g:startify_session_persistence = 1
 let g:startify_session_sort = 1
 
-noremap <Leader>g :Goyo 60%x90%<CR>
 noremap <Leader>pi :PlugInstall<CR>
 noremap <Leader>s :update<CR>
 noremap <Leader>q :SClose<CR>
@@ -55,31 +54,5 @@ noremap <Leader>t :vsp term://bash<CR>
 call plug#begin(stdpath('data') . '/plugged')
 Plug 'mhinz/vim-startify'
 Plug 'easymotion/vim-easymotion'
-Plug 'reedes/vim-pencil'
-Plug 'tpope/vim-abolish' " Fancy abbreviation replacements
-Plug 'junegunn/limelight.vim' " Highlights only active paragraph
-Plug 'junegunn/goyo.vim' " Full screen writing mode
-Plug 'reedes/vim-lexical' " Better spellcheck mappings
-Plug 'reedes/vim-litecorrect' " Better autocorrections
-Plug 'reedes/vim-textobj-sentence' " Treat sentences as text objects
-Plug 'reedes/vim-wordy' " Weasel words and passive voice
 call plug#end()
 
- augroup pencil
-  autocmd!
-  autocmd filetype markdown,mkd call pencil#init()
-      \ | call lexical#init()
-      \ | call litecorrect#init()
-      \ | setl spell spl=en_us fdl=4 noru nonu nornu
-      \ | setl fdo+=search
- augroup END
-" Pencil / Writing Controls {{{
-  let g:pencil#wrapModeDefault = 'soft'
-  let g:pencil#textwidth = 74
-  let g:pencil#joinspaces = 0
-  let g:pencil#cursorwrap = 1
-  let g:pencil#conceallevel = 3
-  let g:pencil#concealcursor = 'c'
-  let g:pencil#softDetectSample = 20
-  let g:pencil#softDetectThreshold = 130
-" }}}

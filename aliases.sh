@@ -1,14 +1,25 @@
-alias resrc="source ~/.bashrc"
+export FNAME="$0"
+export CONFIG_DIR=`dirname "$0"`
+export VISUAL=nvim
+export EDITOR="$VISUAL"
+export RAW_NVIM_CONFIG="~/.config/nvim/init.vim"
+export NVIM_CONFIG="$CONFIG_DIR/nvimconfig.vim"
+export TMUX_CONFIG="$CONFIG_DIR/tmux.conf"
+
+alias resrc="source $FNAME"
+alias prof="$EDITOR $FNAME"
+alias vimrc="$EDITOR $NVIM_CONFIG"
+alias tmuxconf="$EDITOR $TMUX_CONFIG"
 alias gc="git checkout -t -b"
 
 sk () {
- echo "alias $1=\"$2\"" >> ~/.bashrc && resrc
+ echo "alias $1=\"$2\"" >> $FNAME && resrc
 }
 
 sf () {
  echo "$1 () {
  $2
-}" >> ~/.bashrc && resrc
+}" >> $FNAME && resrc
 }
 
 mb () {
@@ -19,24 +30,12 @@ mbc () {
  gc "tchordia-console-$1-ci"
 }
 
-alias prof="vim ~/.bashrc"
 alias t0="tmux a -t 0"
-
-
-export VISUAL=nvim
-export EDITOR="$VISUAL"
-
-alias vimrc="vim ~/.vimrc"
 alias gp="git pull --rebase"
-alias tmuxconf="vim ~/.tmux.conf"
+
 gsr () {
  git grep -l "$1" | xargs sed -i "s/$1/$2/g"
 }
-
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 alias gpbd="git push origin -f \`git symbolic-ref HEAD --short\`"
 af () {
@@ -60,6 +59,7 @@ gpbfunc () {
     gpbd;
   fi
 }
+
 alias gpb="gpbfunc"
 alias adp="ad && gpb"
 alias ss="python -m SimpleHTTPServer"
@@ -69,3 +69,5 @@ alias grc="git rebase --continue"
 alias master="git checkout master"
 alias gl="git log"
 alias gri="git rebase -i origin/master"
+alias vim="nvim"
+alias com="git commit -a -m"
