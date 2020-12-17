@@ -16,6 +16,10 @@ sk () {
  echo "alias $1=\"$2\"" >> $FNAME && resrc
 }
 
+sv () {
+ echo "export $1=\"$2\"" >> $FNAME && resrc
+}
+
 sf () {
  echo "$1 () {
  $2
@@ -37,18 +41,11 @@ gsr () {
  git grep -l "$1" | xargs sed -i "s/$1/$2/g"
 }
 
-alias gpbd="git push origin -f \`git symbolic-ref HEAD --short\`"
-af () {
- if [ $# -eq 0 ]
-   then
-     arc feature
- else
-   arc feature tchordia-console-$1
- fi
-}
+alias br="git symbolic-ref HEAD --short"
+alias gpbd="git push origin \`git symbolic-ref HEAD --short\`"
 alias cdd="cdr && cd www/demo"
 alias sta="git status"
-alias al="arc land"
+
 gpbfunc () {
   branch=`git symbolic-ref HEAD --short`;
   if [[ $branch == "master" ]]
@@ -56,12 +53,11 @@ gpbfunc () {
     echo "on master";
   else
     echo "not on master";
-    gpbd;
+    gpbd "$@";
   fi
 }
 
 alias gpb="gpbfunc"
-alias adp="ad && gpb"
 alias ss="python -m SimpleHTTPServer"
 alias trm="git branch -u origin/master"
 alias grc="git rebase --continue"
@@ -71,3 +67,21 @@ alias gl="git log"
 alias gri="git rebase -i origin/master"
 alias vim="nvim"
 alias com="git commit -a -m"
+
+af () {
+ if [ -z "$1" ]
+ then
+   git branch
+ else
+   local branch="tchordia-$1"
+   local existed_in_local=$(git branch --list ${branch})
+   echo ${branch}
+   echo ${existed_in_local}
+   if [ -z ${existed_in_local} ]
+   then
+     git fetch && git checkout origin/master && git checkout -b tchordia-$1 && git branch -u origin/master
+   else
+     git checkout ${branch}
+   fi
+ fi
+}
