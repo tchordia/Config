@@ -1,12 +1,13 @@
 export FNAME="$0"
-export CONFIG_DIR=`dirname "$0"`
+export DOTFILE_CONFIG_DIR=`dirname "$0"`
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 export RAW_NVIM_CONFIG="~/.config/nvim/init.vim"
-export NVIM_CONFIG="$CONFIG_DIR/nvimconfig.vim"
-export TMUX_CONFIG="$CONFIG_DIR/tmux.conf"
+export NVIM_CONFIG="$DOTFILE_CONFIG_DIR/nvimconfig.vim"
+export TMUX_CONFIG="$DOTFILE_CONFIG_DIR/tmux.conf"
+export BASE_CONFIG="$HOME/.zshrc"
 
-alias resrc="source $FNAME"
+alias resrc="source $BASE_CONFIG"
 alias prof="$EDITOR $FNAME"
 alias vimrc="$EDITOR $NVIM_CONFIG"
 alias tmuxconf="$EDITOR $TMUX_CONFIG"
@@ -18,6 +19,10 @@ sk () {
 
 sv () {
  echo "export $1=\"$2\"" >> $FNAME && resrc
+}
+
+svs () {
+ echo "export $1=\"$2\"" >> $BASE_CONFIG && resrc
 }
 
 sf () {
@@ -67,11 +72,13 @@ alias gl="git log"
 alias gri="git rebase -i origin/master"
 alias vim="nvim"
 alias com="git commit -a -m"
+alias gitbranch="git for-each-ref --sort=-committerdate refs/heads/ --format='%(HEAD) %(color:yellow)%(refname:short)%(color:reset) - %(color:red)%(objectname:short)%(color:reset) - %(contents:subject) - %(authorname) (%(color:green)%(committerdate:relative)%(color:reset))'"
+
 
 af () {
  if [ -z "$1" ]
  then
-   git branch
+   gitbranch
  else
    local branch="tchordia-$1"
    local existed_in_local=$(git branch --list ${branch})
@@ -85,3 +92,48 @@ af () {
    fi
  fi
 }
+
+alias opr='hub pr show -h $(br)'
+conda activate anyscale
+alias cdp="cd ~/product"
+export ANYSCALE_LOCAL_PROXY_URL="https://anyscale.dev"
+alias bopenapi="/Users/tanmay/product/scripts/test/run-lint.sh --build-open-api"
+alias zshrc="vim /Users/tanmay/.zshrc"
+
+alias devrestart="tmux kill-session -t anyscale && anyscale down && anyscale up && tmuxp load anyscale"
+alias devstart="anyscale up --config session-default.yaml && tmuxp load anyscale"
+alias dev="tmuxp load anyscale"
+parseTable () {
+  awk 'FNR == '"$1"' {print $'"$2"'}'
+}
+
+anyurl () {
+  anyscale list ips | parseTable 2 2 | xargs -I % echo "http://%:5000" 
+}
+
+anyopen () {
+  anyurl | xargs open
+}
+
+anyext () {
+  anyurl | xargs -I % open "%/ext/v0/docs"
+}
+
+anydocs () {
+  anyurl | xargs -I % open "%/api/v2/docs"
+}
+
+alias pylint="./scripts/test/run-lint.sh"
+alias am="git commit -a --amend --no-edit"
+inweb () {
+ pushd frontend/web && "$@"; popd
+}
+
+alias lintflake8="flake8 --exclude=backend/server/schemas.py backend --quiet"
+alias pyimport="lintflake8 | tee >(xargs isort  -p anyscale -p backend -p dashboard --conda-env anyscale --honor-noqa --profile google) >(xargs autoflake --remove-unused-variables   --remove-all-unused-imports -i)"
+alias pylintall="pyimport && pylint && lintflake8"
+alias nla="pushd frontend/web && npm run lint-fix && npm test; popd"
+alias nt="inweb npm t"
+
+alias nl="inweb npm run lint-fix"
+alias toweb="pushd frontend/web"
